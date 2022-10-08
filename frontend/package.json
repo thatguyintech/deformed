@@ -18,7 +18,8 @@
     "next-seo": "^5.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.37.0"
+    "react-hook-form": "^7.37.0",
+    "web3": "^1.8.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

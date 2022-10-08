@@ -15,3 +15,4 @@ yarn-error.log*
 .npm
 .eslintcache
 **/.vscode
+.env

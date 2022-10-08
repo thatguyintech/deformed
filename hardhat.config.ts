@@ -1,6 +1,10 @@
+import * as dotenv from "dotenv";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
+import { NetworksUserConfig } from "hardhat/types";
+
+dotenv.config();
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -20,5 +24,18 @@ const config: HardhatUserConfig = {
   },
   etherscan: {},
 };
+
+const {
+  MUMBAI_NETWORK_RPC_URL,
+  MUMBAI_PRIVATE_KEY,
+} = process.env;
+
+if (MUMBAI_NETWORK_RPC_URL && MUMBAI_PRIVATE_KEY) {
+  (config.networks as NetworksUserConfig).mumbai = {
+    chainId: 80001,
+    url: MUMBAI_NETWORK_RPC_URL,
+    accounts: [MUMBAI_PRIVATE_KEY],
+  };
+}
 
 export default config;

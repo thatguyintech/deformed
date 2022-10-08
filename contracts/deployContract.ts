@@ -10,13 +10,11 @@ async function main() {
 
   console.log(`deployed to ${deformed.address} on ${network.name}`);
 
-  console.log(contractAddresses[network.name]);
   // Write deployed address to config file
   contractAddresses[network.name] = deformed.address;
   fs.writeFile('contractAddresses.json', JSON.stringify(contractAddresses, null, 2),
               function writeJSON(err) {
                 if (err) return console.log(err);
-                console.log(JSON.stringify(contractAddresses));
             });
 }
 

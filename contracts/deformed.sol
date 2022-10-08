@@ -16,6 +16,9 @@ contract Deformed {
 
     Form[] public forms;
 
+    mapping(address => uint256[]) public createdForms;
+    mapping(address => uint256[]) public respondedForms;
+
     function createForm(
         string calldata _configIPFSHash,
         TokenPointer[] calldata _accessControlTokens,
@@ -29,6 +32,7 @@ contract Deformed {
             newForm.credentials.push(_credentials[i]);
         }
         newForm.configIPFSHash = _configIPFSHash;
+        createdForms[msg.sender].push(forms.length-1);
     }
 
     function submitFormResponse(
@@ -42,5 +46,6 @@ contract Deformed {
                     "User does not own required token");
         }
         curForm.responses.push(_responseHash);
+        respondedForms[msg.sender].push(formId);
     }
 }

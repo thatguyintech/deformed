@@ -6,8 +6,8 @@ tmp/
 *.tern-port
 **/node_modules
 **/typechain-types
-protocol/cache
-protocol/artifacts
+cache
+artifacts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

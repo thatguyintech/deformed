@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 type IMainProps = {
-  meta: ReactNode;
+  meta?: ReactNode;
   children: ReactNode;
 };
 

@@ -1,12 +1,10 @@
 import { Router } from "express";
 
+import { createForm, getForm, getForms } from "../../controllers/forms";
 import {
-  createForm,
-  getForm,
+  createFormAnswer,
   getFormAnswers,
-  getForms,
-} from "../../controllers/forms";
-import { createAnswer } from "../../controllers/forms/answers";
+} from "../../controllers/forms/answers";
 
 import { createAnswerValidator } from "./validation/createAnswer";
 import { createFormValidator } from "./validation/createForm";
@@ -19,5 +17,5 @@ formsRouter.get("/", getForms);
 formsRouter.get("/:formId", getForm);
 
 // Form Answers
-formsRouter.post("/:formId/answers", createAnswerValidator, createAnswer);
+formsRouter.post("/:formId/answers", createAnswerValidator, createFormAnswer);
 formsRouter.get("/:formId/answers", getFormAnswers);

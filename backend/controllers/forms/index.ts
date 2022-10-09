@@ -87,22 +87,3 @@ function convertTokenPointer(tokenPointer: Deformed.TokenPointerStructOutput) {
     tokenId: tokenPointer.tokenId.toNumber(),
   };
 }
-
-/**
- * Get answers for given formId
- */
-export const getFormAnswers = asyncWrapper(
-  async (req: Request, res: Response): Promise<Response> => {
-    const formId = convertToInteger(req.params.formId);
-
-    const data = [];
-    const responses = await deformed.getResponses(formId);
-    for (const response of responses) {
-      const hash = response.responseIPFSHash;
-      const [cid, fileName] = hash.split("/");
-      const answers = JSON.parse(await retrieve(cid, fileName));
-      data.push({ answers: answers, address: response.respondingAddress });
-    }
-    return res.status(200).send({ data: data });
-  },
-);

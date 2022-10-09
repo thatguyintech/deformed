@@ -59,7 +59,6 @@ export const getForms = asyncWrapper(
     if (!createdByAddress) {
       throw new ClientError(`createdByAddress query param is required!`);
     }
-    // const deformed = getDeformed();
     const formIds = await deformed.getCreatedForms(createdByAddress);
     const data = [];
     for (const formId in formIds) {
@@ -69,6 +68,7 @@ export const getForms = asyncWrapper(
       const credentials = await deformed.getCredentials(formId);
       const accessControlTokens = await deformed.getAccessControlTokens(formId);
       data.push({
+        formId: convertToInteger(formId),
         form: form,
         accessControlTokens: accessControlTokens.map((token) =>
           convertTokenPointer(token),

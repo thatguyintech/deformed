@@ -10,7 +10,7 @@ import { Tab } from "@headlessui/react";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import Question from "./Question";
-import { Deformed__factory } from "@deformed/protocol";
+import { Deformed__factory } from "@deformed/contracts";
 import { ethers } from "ethers";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 

@@ -98,13 +98,22 @@ const Answer = ({ formId }: any) => {
       if (formId) {
         const form = await getForm(formId);
         setFormFields(form.form.fields);
-        setHasAccess(
-          await checkAccessTokens(form.accessControlTokens, address)
-        );
       }
     };
     obtainForm();
   }, [formId]);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (address) {
+        const form = await getForm(formId);
+        setHasAccess(await checkAccessTokens(form.accessControlTokens, address));
+      }
+    };
+    checkAccess();
+  }, [address]);
+  
+
 
   return (
     <>

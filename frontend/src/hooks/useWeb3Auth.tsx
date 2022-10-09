@@ -25,7 +25,7 @@ const Context = createContext<Web3AuthContext>({
 export const Web3AuthProvider = ({children}: any) => {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [web3authProvider, setWeb3authProvider] = useState<SafeEventEmitterProvider | null>(null);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
     if (!!web3auth && !!web3authProvider) {
@@ -85,6 +85,7 @@ export const Web3AuthProvider = ({children}: any) => {
     }
     await web3auth.logout();
     setWeb3authProvider(null);
+    setAddress("");
   };
 
   const getChainId = async () => {

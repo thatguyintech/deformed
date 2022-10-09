@@ -12,7 +12,7 @@ interface Web3AuthContext {
   login: any;
   logout: any;
   getAccounts: any;
-  sendTransaction: any;
+  sendTestTransaction: any;
 }
 
 const Context = createContext<Web3AuthContext>({
@@ -21,7 +21,7 @@ const Context = createContext<Web3AuthContext>({
   login: null,
   logout: null,
   getAccounts: null,
-  sendTransaction: null,
+  sendTestTransaction: null,
 });
 
 export const Web3AuthProvider = ({children}: any) => {
@@ -113,13 +113,13 @@ export const Web3AuthProvider = ({children}: any) => {
     console.log(balance);
   };
 
-  const sendTransaction = async () => {
+  const sendTestTransaction = async () => {
     if (!web3authProvider) {
       console.log("provider not initialized yet");
       return;
     }
     const rpc = new RPC(web3authProvider);
-    const receipt = await rpc.sendTransaction();
+    const receipt = await rpc.sendTestTransaction();
     console.log(receipt);
   };
 
@@ -144,7 +144,7 @@ export const Web3AuthProvider = ({children}: any) => {
   };
 
   return (
-    <Context.Provider value={{ web3auth, web3authProvider, login, logout, getAccounts, sendTransaction}}>
+    <Context.Provider value={{ web3auth, web3authProvider, login, logout, getAccounts, sendTestTransaction}}>
       {children}
     </Context.Provider>
   ) 

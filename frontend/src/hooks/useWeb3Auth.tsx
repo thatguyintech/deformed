@@ -111,16 +111,6 @@ export const Web3AuthProvider = ({children}: any) => {
     console.log(balance);
   };
 
-  const sendTransaction = async () => {
-    if (!web3authProvider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(web3authProvider);
-    const receipt = await rpc.sendTransaction();
-    console.log(receipt);
-  };
-
   const signMessage = async () => {
     if (!web3authProvider) {
       console.log("provider not initialized yet");
@@ -150,6 +140,5 @@ export const Web3AuthProvider = ({children}: any) => {
 
 /**
  * Consumer for Web3Auth object. Must be used within context of Web3AuthProvider.
- * @returns { web3auth, web3authProvider }
  */
  export const useWeb3Auth = () => useContext(Context);

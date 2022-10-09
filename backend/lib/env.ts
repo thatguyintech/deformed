@@ -61,4 +61,8 @@ export class Env {
   static getWeb3StorageApiToken(): string {
     return process.env.WEB3_STORAGE_API_TOKEN as string;
   }
+
+  static getAlchemyApiKey(): string {
+    return process.env.ALCHEMY_API_KEY as string;
+  }
 }

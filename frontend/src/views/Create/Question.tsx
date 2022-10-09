@@ -13,7 +13,7 @@ const Question = ({ name, index }: any) => {
     watch,
   } = useFormContext();
 
-  const { fields, append, remove, insert } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: `fields.${index}.properties.choices`, // unique name for your Field Array
   });
 

@@ -7,9 +7,7 @@ const Index = () => {
   const router = useRouter();
 
   return (
-    <Main
-      meta={<Meta title="Deformed" description="Decentralized forms lol" />}
-    >
+    <Main>
       <div className="flex justify-center mt-10 gap-x-3">
         <Button
           theme="primary"

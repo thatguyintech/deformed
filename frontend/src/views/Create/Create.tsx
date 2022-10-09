@@ -10,6 +10,9 @@ import { Tab } from "@headlessui/react";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import Question from "./Question";
+import { Deformed__factory } from "@deformed/protocol";
+import { ethers } from "ethers";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 
 const Create = () => {
   const methods = useForm({
@@ -28,6 +31,8 @@ const Create = () => {
 
   const { watch, control, handleSubmit } = methods;
 
+  const {web3authProvider} = useWeb3Auth();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "fields",
@@ -38,7 +43,14 @@ const Create = () => {
   }, [watch()]);
 
   const onFormSubmit = handleSubmit(async (value) => {
-    await createForm(value);
+    console.log(value);
+    const formHash = await createForm(value);
+    const provider = new ethers.providers.Web3Provider(web3authProvider);
+    const deformed = Deformed__factory.connect("0xfFAfd3b46D3034bB3f12868c92DCA375E7263C38", provider.getSigner());
+    await deformed.createForm(formHash.hash,
+        // TODO: add your token arrays
+        // Looks like [{contractAddress: deformed.address, tokenId: 3}, ...]
+        [], []);
   });
 
   const [accessControlChecked, setAccessControlChecked] = useState(false);

@@ -43,3 +43,10 @@ export const getErrorMessage = (axiosError: AxiosError) => {
 export const postReq = async (url: string, { data, config }: any) => {
   return callApiAndReturnData(ApiInstance.post(url, data, config));
 };
+
+export const getReq = (
+  url: string,
+  config?: AxiosRequestConfig | undefined,
+) => {
+  return callApiAndReturnData(ApiInstance.get(url, config));
+};

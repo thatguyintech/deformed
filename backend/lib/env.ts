@@ -36,7 +36,7 @@ export class Env {
     if (isOfTypeEnvEnum(process.env.NODE_ENV!)) {
       return process.env.NODE_ENV as EnvEnum;
     } else {
-      return "development";
+      return "production";
     }
   }
 

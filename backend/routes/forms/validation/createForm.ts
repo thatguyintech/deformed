@@ -1,9 +1,6 @@
 import { checkSchema, CustomValidator } from "express-validator";
 
-import {
-  FormField,
-  FormFieldType,
-} from "../../../global/types";
+import { FormField, FormFieldType } from "../../../global/types";
 import { convertToInteger } from "../../../lib/validation";
 
 import {
@@ -24,13 +21,10 @@ const FormFieldValidations = {
 
 const ratingPropertiesValidator = (field: FormField) => {
   if (!field.properties || !field.properties.steps) {
-    throw new MissingFormFieldProperties(FormFieldType.Rating, [
-      "steps",
-    ]);
+    throw new MissingFormFieldProperties(FormFieldType.Rating, ["steps"]);
   }
   if (
-    convertToInteger(field.properties.steps) >
-    FormFieldValidations.MAX_STEPS
+    convertToInteger(field.properties.steps) > FormFieldValidations.MAX_STEPS
   ) {
     throw new InvalidFormFieldPropertiesValue(
       "steps",

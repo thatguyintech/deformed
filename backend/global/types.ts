@@ -25,4 +25,4 @@ export type FormField = {
 
 export type Form = {
   fields: FormField[];
-}
+};

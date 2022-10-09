@@ -1,5 +1,7 @@
 import { checkSchema, CustomValidator } from "express-validator";
+
 import { Form, FormField, FormFieldType } from "../../../global/types";
+import { deformed } from "../../../lib/protocol";
 import { retrieve } from "../../../lib/storage";
 import { convertToInteger } from "../../../lib/validation";
 
@@ -23,7 +25,9 @@ const AnswerValidations = {
 const formAnswersValidator: CustomValidator = async (value, { req }) => {
   const formId = req.body.formId as string;
 
-  const [cid, fileName] = formId.split("/");
+  const hash = (await deformed.forms(formId)).configIPFSHash;
+
+  const [cid, fileName] = hash.split("/");
 
   const form = JSON.parse(await retrieve(cid, fileName)) as Form;
 
@@ -36,9 +40,9 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
     const value = answer.value as string;
     const referenceId = answer.referenceId;
 
-    const formField = (
-      form.fields as Array<FormField>
-    ).find((field) => field.referenceId === referenceId);
+    const formField = (form.fields as Array<FormField>).find(
+      (field) => field.referenceId === referenceId,
+    );
 
     if (!formField) {
       throw new InvalidFormFieldReferenceId(referenceId, formId);
@@ -74,15 +78,11 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
       case FormFieldType.Rating: {
         const integerValue = convertToInteger(value);
         if (!formField.properties || !formField.properties.steps) {
-          throw new MisconfiguredForm(
-            formId,
-            formField.title,
-          );
+          throw new MisconfiguredForm(formId, formField.title);
         }
         if (
           integerValue < 1 ||
-          (formField.properties &&
-            integerValue > formField.properties.steps)
+          (formField.properties && integerValue > formField.properties.steps)
         ) {
           throw new InvalidAnswerFieldValue(
             formField.title,
@@ -94,10 +94,7 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
       }
       case FormFieldType.MultipleChoice: {
         if (!formField.properties || !formField.properties.choices) {
-          throw new MisconfiguredForm(
-            formId,
-            formField.title,
-          );
+          throw new MisconfiguredForm(formId, formField.title);
         }
         if (
           !formField.properties.allowOtherChoice &&
@@ -117,7 +114,9 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
 
 export const createAnswerValidator = checkSchema({
   formId: {
-    isString: true,
+    isInt: {
+      options: { min: 0 },
+    },
   },
   formAnswers: {
     isArray: true,

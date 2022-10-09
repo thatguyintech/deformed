@@ -25,7 +25,7 @@ const Context = createContext<Web3AuthContext>({
 export const Web3AuthProvider = ({children}: any) => {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [web3authProvider, setWeb3authProvider] = useState<SafeEventEmitterProvider | null>(null);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
     if (!!web3auth && !!web3authProvider) {
@@ -38,7 +38,7 @@ export const Web3AuthProvider = ({children}: any) => {
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.EIP155,
           chainId: "0x13881", // TODO: support dynamic chain ID
-          rpcTarget: "https://matic-mumbai.chainstacklabs.com", // TODO: support dynamic rpc url
+          rpcTarget: "https://polygon-mumbai.g.alchemy.com/v2/EGanVQmmBmhP5M7_tGsPEyI6YDQfngjZ", // TODO: support dynamic rpc url
         },
       });
 
@@ -85,6 +85,7 @@ export const Web3AuthProvider = ({children}: any) => {
     }
     await web3auth.logout();
     setWeb3authProvider(null);
+    setAddress("");
   };
 
   const getChainId = async () => {

@@ -18,7 +18,7 @@ const iconForId = (id: string | undefined) => {
     return <ListBulletIcon />;
   }
 
-  return <></>;
+  return "";
 };
 
 const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
@@ -58,9 +58,12 @@ const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
                       />
                     </figure>
                   )}
-                  <figure className={iconStyle}>
-                    {iconForId(selected?.id)}
-                  </figure>
+                  {iconForId(selected?.id) && (
+                    <figure className={iconStyle}>
+                      {iconForId(selected?.id)}
+                    </figure>
+                  )}
+
                   <p className={cx(textOverflowStyle, "mr-4")}>
                     {selected?.label}
                   </p>
@@ -130,7 +133,9 @@ const DropdownMenuItem = ({
                 />
               </figure>
             )}
-            <figure className={iconStyle}>{iconForId(id)}</figure>
+            {iconForId(id) && (
+              <figure className={iconStyle}>{iconForId(id)}</figure>
+            )}
             <p className={textOverflowStyle}>{label}</p>
           </button>
         )}

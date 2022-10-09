@@ -7,22 +7,22 @@ const Index = () => {
 
   return (
     <Main>
-      <div className="flex justify-center mt-10 gap-x-3">
+      <div className="flex justify-center mt-10 gap-x-4">
         <Button
           theme="primary"
           onClick={() => {
             router.push("/create");
           }}
         >
-          Create Form
+          Create form
         </Button>
         <Button
           theme="whiteBorder"
           onClick={() => {
-            router.push("/view");
+            router.push("/responses");
           }}
         >
-          View Forms
+          Responses
         </Button>
       </div>
     </Main>

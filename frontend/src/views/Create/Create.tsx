@@ -11,6 +11,7 @@ import Question from "./Question";
 import { Deformed__factory } from "@deformed/contracts";
 import { ethers } from "ethers";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import { PageLoader } from "@/components/PageLoader/PageLoader";
 
 const Create = () => {
   const methods = useForm({
@@ -31,22 +32,33 @@ const Create = () => {
     name: "fields",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [txHash, setTxHash] = useState<string>("");
+
   const numQuestions = useMemo(() => {
     return watch().fields.length;
   }, [watch()]);
 
   const onFormSubmit = handleSubmit(async (formValues) => {
-    const formHash = await createForm({ fields: formValues.fields });
-    const provider = new ethers.providers.Web3Provider(web3authProvider);
-    const deformed = Deformed__factory.connect(
-      "0xfFAfd3b46D3034bB3f12868c92DCA375E7263C38",
-      provider.getSigner()
-    );
-    await deformed.createForm(
-      formHash.hash,
-      convertTokenArrayStringIntoArray(formValues.accessControlTokens),
-      convertTokenArrayStringIntoArray(formValues.credentials)
-    );
+    try {
+      const formHash = await createForm({ fields: formValues.fields });
+      const provider = new ethers.providers.Web3Provider(web3authProvider);
+      const deformed = Deformed__factory.connect(
+        "0xfFAfd3b46D3034bB3f12868c92DCA375E7263C38",
+        provider.getSigner()
+      );
+      setLoading(true);
+      const tx = await deformed.createForm(
+        formHash.hash,
+        convertTokenArrayStringIntoArray(formValues.accessControlTokens),
+        convertTokenArrayStringIntoArray(formValues.credentials)
+      );
+      setTxHash(tx.hash);
+      setLoading(false);
+    } catch (error: any) {
+      console.log(error);
+      setLoading(false);
+    }
   });
 
   const convertTokenArrayStringIntoArray = (tokenArrayString: string) => {
@@ -205,6 +217,15 @@ const Create = () => {
             Create
           </Button>
         </div>
+        {loading && <PageLoader />}
+        {txHash && (
+          <div>
+            Successfully submitted!{" "}
+            <a href={`https://mumbai.polygonscan.com/tx/${txHash}`}>
+              <u>Link to transaction.</u>
+            </a>
+          </div>
+        )}
       </Form>
     </>
   );

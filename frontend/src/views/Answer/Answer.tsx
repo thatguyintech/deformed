@@ -175,10 +175,7 @@ const Answer = ({ formId }: any) => {
             {txHash && (
               <div>
                 Successfully submitted!{" "}
-                <a
-                  href={`https://mumbai.polygonscan.com/tx/
-                ${txHash}`}
-                >
+                <a href={`https://mumbai.polygonscan.com/tx/${txHash}`}>
                   <u>Link to transaction.</u>
                 </a>
               </div>

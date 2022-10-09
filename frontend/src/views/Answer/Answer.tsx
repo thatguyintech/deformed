@@ -1,54 +1,58 @@
-import { createAnswer } from "@/api/forms";
+import { createAnswer, getForm } from "@/api/forms";
 import Card from "@/components/Card/Card";
 import { Main } from "@/templates/Main";
+import { useEffect, useState } from "react";
 import AnswerForm from "./AnswerForm";
 
-const fields = [
-  {
-    type: "shortText",
-    title: "What is your name?",
-    required: true,
-    referenceId: "nameQuestion",
-  },
-  {
-    type: "shortText",
-    title: "Which email do you use for Alchemy?",
-    required: true,
-    description:
-      "If you don't have an Alchemy account, make sure to click here to sign up for an account now, for FREE!",
-    referenceId: "emailQuestion",
-  },
-  {
-    type: "longText",
-    title: "Share your learnings!",
-    required: true,
-    description:
-      "1. What was the biggest lesson from this challenge? \n2. What did you like/dislike about this challenge? Why? \n3. What do you want to build next?",
-    referenceId: "shareYourLearningsQuestion",
-  },
-  {
-    type: "multipleChoice",
-    title: "Which country or region are you coding from?",
-    required: true,
-    referenceId: "countryRegionQuestion",
-    properties: {
-      choices: ["India", "Taiwan", "Nigeria", "Japan"],
-      allowOtherChoice: false,
-    },
-  },
-];
-
-const Answer = () => {
-  const submitAnswer = async (value: any) => {
+const Answer = ({ formId }: any) => {
+  const [formFields, setFormFields] = useState<any[]>([]);
+  const submitAnswer = async (rawFormAnswerDict: any) => {
+    /**
+     * The form answers will come in the following format:
+     * {
+     *  question-0: '1asdf'
+     * }
+     * 
+     * We need the API POST body to be in this format instead:
+     * [
+     *  {
+     *    "referenceId": "question-0",
+     *    "value": "1asdf"
+     *  }
+     * ]
+     */
     try {
+      const createAnswerFormAnswers: any[]= [];
+      const keys = Object.keys(rawFormAnswerDict);
+      keys.forEach((key) => {
+        const answer = rawFormAnswerDict[key];
+        createAnswerFormAnswers.push(
+          {
+            "referenceId": key,
+            "value": answer,
+          }
+        )
+      })
       await createAnswer({
-        formId: "",
-        formAnswers: [],
+        formId: formId,
+        formAnswers: createAnswerFormAnswers,
       });
     } catch (error: any) {
       console.log(error);
     }
   };
+
+
+  // obtain the form config from the backend API to populate the form itself
+  useEffect(() => {
+    const obtainForm = async () => {
+      if (formId) {
+        const form = await getForm(formId);
+        setFormFields(form.fields);
+      }
+    };
+    obtainForm();
+  }, [formId]);
 
   return (
     <>
@@ -58,7 +62,7 @@ const Answer = () => {
 
           <AnswerForm
             className="w-full mb-5"
-            fields={fields}
+            fields={formFields}
             onSubmit={submitAnswer}
           />
         </Card>

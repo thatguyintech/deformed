@@ -18,24 +18,32 @@ const Responses = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (web3authProvider && address) {
-        setLoading(true);
-        const formsResponse = await getFormsCreatedByAddress(address);
-        setCreatedForms(formsResponse.data);
-        selectForm(formsResponse.data[0]);
-        setLoading(false);
+      if (address) {
+        try {
+          setLoading(true);
+          const formsResponse = await getFormsCreatedByAddress(address);
+          setCreatedForms(formsResponse.data);
+          selectForm(formsResponse.data[0]);
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+        }
       }
     };
     fetch();
-  }, [web3authProvider]);
+  }, [address]);
 
   const selectForm = async (formData: any) => {
-    const formId = formData?.formId;
-    setSelectedForm(formId);
-    setSelectedFields(formData?.form?.fields);
-    if (formId) {
-      const answersResponse = await getFormAnswers(selectedForm as number);
-      setResponses(answersResponse.data);
+    try {
+      const formId = formData?.formId;
+      setSelectedForm(formId);
+      setSelectedFields(formData?.form?.fields);
+      if (formId) {
+        const answersResponse = await getFormAnswers(formData?.formId);
+        setResponses(answersResponse.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

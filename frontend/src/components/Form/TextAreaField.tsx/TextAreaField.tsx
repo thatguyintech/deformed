@@ -9,7 +9,7 @@ import { borderStyle, fontStyle } from "../styles";
 export interface TextAreaFieldProps
   extends React.HTMLProps<HTMLTextAreaElement> {
   name: string;
-  label: string;
+  label?: string;
   error?: string;
   isRequired?: boolean;
   className?: string;

@@ -479,6 +479,9 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@deformed/contracts@file:../dist":
+  version "0.0.0"
+
 "@emotion/babel-plugin@^11.10.0":
   version "11.10.2"
   resolved "https://registry.yarnpkg.com/@emotion/babel-plugin/-/babel-plugin-11.10.2.tgz#879db80ba622b3f6076917a1e6f648b1c7d008c7"

@@ -22,6 +22,9 @@ export async function getOwnedCredentials(
     { contractAddresses: Object.keys(tokenPointers) },
     `Getting nfts for owner ${address}`,
   );
+  if (Object.keys(tokenPointers).length === 0) {
+    return [];
+  }
   const nftsForOwner = await alchemy.nft.getNftsForOwner(address, {
     contractAddresses: Object.keys(tokenPointers),
   });

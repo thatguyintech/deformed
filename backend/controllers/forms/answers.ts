@@ -1,4 +1,3 @@
-import { BigNumber } from "ethers";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 

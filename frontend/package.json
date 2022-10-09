@@ -14,9 +14,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.12",
     "@hookform/error-message": "^2.0.0",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.8",
     "@web3auth/base": "^2.1.3",
     "@web3auth/web3auth": "^2.1.3",
     "axios": "^1.1.2",

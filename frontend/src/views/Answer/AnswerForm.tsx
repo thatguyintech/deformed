@@ -4,8 +4,9 @@ import TextField from "../../components/Form/TextField/TextField";
 import Button from "../../components/Button/Button";
 import TextAreaField from "@/components/Form/TextAreaField.tsx/TextAreaField";
 import RadioField from "@/components/Form/RadioField.tsx/RadioField";
+import CredentialList from "./CredentialList";
 
-const Answer = ({ className, fields, onSubmit }: any) => {
+const Answer = ({ className, fields, credentials, onSubmit }: any) => {
   const methods = useForm({
     mode: "all",
   });
@@ -53,6 +54,7 @@ const Answer = ({ className, fields, onSubmit }: any) => {
     <>
       <Form {...methods} onSubmit={submitForm} className={className}>
         {getTemplateFromFields(fields)}
+        <CredentialList className="mb-7 w-full" credentials={credentials}/>
         <div className="flex gap-x-7 items-center justify-end">
           <Button theme="custom">
             <p className="!font-semibold">Cancel</p>

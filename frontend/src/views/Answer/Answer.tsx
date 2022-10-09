@@ -4,7 +4,7 @@ import { Main } from "@/templates/Main";
 import { useEffect, useState } from "react";
 import AnswerForm from "./AnswerForm";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { checkOwner } from "../../api/nfts";
+import { checkOwner, fetchNFTMetadata } from "../../api/nfts";
 import { ethers } from "ethers";
 import { Deformed__factory } from "@deformed/contracts";
 
@@ -16,7 +16,8 @@ interface Token {
 export type CredentialNFT = {
   contractAddress: string;
   tokenId: string;
-  imageUrl: string;
+  mediaUrl: string;
+  mediaType?: string;
   name: string;
   description: string;
 };
@@ -25,6 +26,7 @@ const Answer = ({ formId }: any) => {
   const { address } = useWeb3Auth();
   const [formFields, setFormFields] = useState<any[]>([]);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [ownedCredentials, setOwnedCredentials] = useState<CredentialNFT[]>([]);
 
   const { web3authProvider } = useWeb3Auth();
 
@@ -92,6 +94,32 @@ const Answer = ({ formId }: any) => {
     return true;
   };
 
+  const obtainOwnedCredentials = async(
+    adminSetCredentials: Array<Token>,
+    loggedInAddress: string,
+  ): Promise<CredentialNFT[]>=> {
+    const ownedTokens = [];
+
+    console.log(adminSetCredentials);
+
+    // first check if user owns any admin set credential
+    for (const token of adminSetCredentials) {
+      const contractAddress = token.contractAddress;
+      const tokenId = token.tokenId;
+      const owners = await checkOwner(contractAddress, tokenId);
+      if (owners.includes(loggedInAddress.toLowerCase())) {
+        ownedTokens.push({contractAddress: contractAddress, tokenId: tokenId});
+      }
+    }
+
+    // then obtain NFT metadata for any owned credentials
+    const embellishedOwnedTokens: CredentialNFT[] = [];
+    for (const token of ownedTokens) {
+      embellishedOwnedTokens.push(await fetchNFTMetadata(token.contractAddress, token.tokenId));
+    }
+    return embellishedOwnedTokens;
+  }
+
   // obtain the form config from the backend API to populate the form itself
   useEffect(() => {
     const obtainForm = async () => {
@@ -108,12 +136,11 @@ const Answer = ({ formId }: any) => {
       if (address) {
         const form = await getForm(formId);
         setHasAccess(await checkAccessTokens(form.accessControlTokens, address));
+        setOwnedCredentials(await obtainOwnedCredentials(form.credentials, address));
       }
     };
     checkAccess();
   }, [address]);
-  
-
 
   return (
     <>
@@ -127,6 +154,7 @@ const Answer = ({ formId }: any) => {
             <AnswerForm
               className="w-full mb-5"
               fields={formFields}
+              credentials={ownedCredentials}
               onSubmit={submitAnswer}
             />
           </Card>

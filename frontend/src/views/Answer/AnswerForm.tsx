@@ -5,6 +5,7 @@ import Button from "../../components/Button/Button";
 import TextAreaField from "@/components/Form/TextAreaField.tsx/TextAreaField";
 import RadioField from "@/components/Form/RadioField.tsx/RadioField";
 import CredentialList from "./CredentialList";
+import FormLabel from "@/components/Form/FormLabel";
 
 const Answer = ({ className, fields, credentials, onSubmit }: any) => {
   const methods = useForm({
@@ -54,6 +55,7 @@ const Answer = ({ className, fields, credentials, onSubmit }: any) => {
     <>
       <Form {...methods} onSubmit={submitForm} className={className}>
         {getTemplateFromFields(fields)}
+        <FormLabel className="mb-2" label={"Owned Credentials"} />
         <CredentialList className="mb-7 w-full" credentials={credentials}/>
         <div className="flex gap-x-7 items-center justify-end">
           <Button theme="custom">

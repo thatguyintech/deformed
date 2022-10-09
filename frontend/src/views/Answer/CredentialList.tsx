@@ -16,10 +16,10 @@ const CredentialList = ({className, credentials}: CredentialListProps) => {
     <>
       <ImageList className={className}>
       {credentials && credentials.map((item) => (
-        <ImageListItem key={item.imageUrl}>
+        <ImageListItem key={item.mediaUrl}>
           <img
-            src={`${item.imageUrl}?w=248&fit=crop&auto=format`}
-            srcSet={`${item.imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.mediaUrl}?w=248&fit=crop&auto=format`}
+            srcSet={`${item.mediaUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
             alt={item.name}
             loading="lazy"
           />

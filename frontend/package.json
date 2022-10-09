@@ -32,6 +32,7 @@
     "web3": "^1.8.0"
   },
   "devDependencies": {
+    "@deformed/contracts": "file:../dist",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@next/bundle-analyzer": "^12.3.0",

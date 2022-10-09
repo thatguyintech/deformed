@@ -99,16 +99,6 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
         if (!formField.properties || !formField.properties.choices) {
           throw new MisconfiguredForm(formId, formField.title);
         }
-        if (
-          !formField.properties.allowOtherChoice &&
-          formField.properties.choices.includes(value)
-        ) {
-          throw new InvalidAnswerFieldValue(
-            formField.title,
-            value,
-            `Value is not a valid multiple choice option.`,
-          );
-        }
         break;
       }
     }

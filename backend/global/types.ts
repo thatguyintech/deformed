@@ -11,7 +11,6 @@ export type FormFieldProperties = {
 
   // multipleChoice properties
   choices?: string[];
-  allowOtherChoice?: boolean;
 };
 
 export type FormField = {

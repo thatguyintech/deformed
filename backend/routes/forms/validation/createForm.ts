@@ -35,14 +35,9 @@ const ratingPropertiesValidator = (field: FormField) => {
 };
 
 const multipleChoicePropertiesValidator = (field: FormField) => {
-  if (
-    !field.properties ||
-    !field.properties.choices ||
-    !field.properties.allowOtherChoice
-  ) {
+  if (!field.properties || !field.properties.choices) {
     throw new MissingFormFieldProperties(FormFieldType.MultipleChoice, [
       "choices",
-      "allowOtherChoice",
     ]);
   }
   const choices = field.properties.choices;
@@ -54,13 +49,6 @@ const multipleChoicePropertiesValidator = (field: FormField) => {
       "choices",
       choices.toString(),
       `Number of choices must be between 1-${FormFieldValidations.MAX_NUM_CHOICES}.`,
-    );
-  }
-  if (typeof field.properties.allowOtherChoice !== "boolean") {
-    throw new InvalidFormFieldPropertiesValue(
-      "allowOtherChoice",
-      field.properties.allowOtherChoice,
-      `Must be boolean (true, false).`,
     );
   }
   choices.forEach((choice) => {

@@ -45,7 +45,7 @@ const Question = ({ name, index }: any) => {
     },
     {
       id: "multipleChoice",
-      label: "Radio",
+      label: "Multiple Choice",
       iconUrl: "",
       onClick: () => {
         if (selectedType !== "multipleChoice") {
@@ -63,7 +63,11 @@ const Question = ({ name, index }: any) => {
         <div className="p-2">
           <p className="mb-2 text-gray-600">Short answer text</p>
           <div
-            className={cx(borderStyle(false), textInputStyle, "text-gray-400")}
+            className={cx(
+              borderStyle(false),
+              textInputStyle,
+              "text-gray-400 text-sm"
+            )}
           >
             <p>Answer here</p>
           </div>
@@ -77,7 +81,7 @@ const Question = ({ name, index }: any) => {
             className={cx(
               borderStyle(false),
               textInputStyle,
-              "text-gray-400 py-0 pb-10 pt-2"
+              "text-gray-400 py-0 pb-10 pt-2 text-sm"
             )}
           >
             <p>Answer here</p>

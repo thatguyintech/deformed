@@ -1,8 +1,25 @@
 import { Menu } from "@headlessui/react";
 import { fontStyle } from "../Form/styles";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronDownIcon,
+  Bars2Icon,
+  Bars3BottomLeftIcon,
+  ListBulletIcon,
+} from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { cx } from "@/utils/utils";
+
+const iconForId = (id: string | undefined) => {
+  if (id === "shortText") {
+    return <Bars2Icon />;
+  } else if (id === "longText") {
+    return <Bars3BottomLeftIcon />;
+  } else if (id === "multipleChoice") {
+    return <ListBulletIcon />;
+  }
+
+  return <></>;
+};
 
 const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
   const [selected, setSelected] = useState<DropdownMenuItem | undefined>({
@@ -17,10 +34,6 @@ const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
       setSelected(items[0]);
     }
   }, [items]);
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
 
   return (
     <>
@@ -45,6 +58,9 @@ const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
                       />
                     </figure>
                   )}
+                  <figure className={iconStyle}>
+                    {iconForId(selected?.id)}
+                  </figure>
                   <p className={cx(textOverflowStyle, "mr-4")}>
                     {selected?.label}
                   </p>
@@ -56,7 +72,7 @@ const DropdownMenu = ({ items }: { items: DropdownMenuItem[] }) => {
 
             <Menu.Items
               className={cx(
-                "absolute origin-top-right overflow-y-auto shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 min-w-[160px] rounded-[16px] pb-2 pt-1 max-h-[150px] overflow-hidden"
+                "absolute origin-top-right overflow-y-auto shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 min-w-[180px] rounded-[16px] pb-2 pt-1 max-h-[150px] overflow-hidden"
               )}
             >
               {items?.map((item: DropdownMenuItem) => {
@@ -114,6 +130,7 @@ const DropdownMenuItem = ({
                 />
               </figure>
             )}
+            <figure className={iconStyle}>{iconForId(id)}</figure>
             <p className={textOverflowStyle}>{label}</p>
           </button>
         )}
@@ -123,7 +140,7 @@ const DropdownMenuItem = ({
 };
 const textOverflowStyle =
   "text-ellipsis whitespace-nowrap overflow-hidden text-sm";
-const iconStyle = "!h-7 !w-7 rounded-[4rem] mr-2 flex-none";
+const iconStyle = "!h-5 !w-5 rounded-[4rem] mr-2 flex-none";
 const mediaStyle = "";
 
 export default DropdownMenu;

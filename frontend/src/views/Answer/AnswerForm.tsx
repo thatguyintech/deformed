@@ -42,7 +42,7 @@ const Answer = ({ className, fields, onSubmit }: any) => {
               ? field.properties.choices
               : undefined
           }
-          placeholder={"Answer here"}
+          placeholder={"Answer"}
           isRequired
         />
       );

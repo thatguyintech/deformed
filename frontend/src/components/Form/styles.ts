@@ -1,6 +1,6 @@
 export const textInputStyle = "h-13 w-full rounded px-3 py-2";
 
-export const fontStyle = "";
+export const fontStyle = "text-sm";
 
 export const validBorderStyle = "border border-gray-400";
 

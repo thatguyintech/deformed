@@ -11,7 +11,7 @@ const RequestCard = ({ answer, address }: RequestCardProps) => {
       <div className="bg-white shadow-md w-full rounded-lg px-6 py-4 border-solid border-[1px] border-gray">
         <div className="mb-3 flex items-center">
           <p className="text-sm">
-            Requester: <span className="ml-4 font-semibold">{address}</span>
+            Address: <span className="ml-4 font-semibold">{address}</span>
           </p>
         </div>
 

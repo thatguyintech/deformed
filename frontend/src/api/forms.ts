@@ -11,3 +11,11 @@ export const createAnswer = ({ formId, formAnswers }: any) => {
 export const getForm = (formId: number) => {
   return getReq(`/forms/${formId}`);
 };
+
+export const getFormAnswers = (formId: number) => {
+  return getReq(`/forms/${formId}/answers`);
+};
+
+export const getFormsCreatedByAddress = (address: string) => {
+  return getReq(`/forms?createdByAddress=${address}`);
+};

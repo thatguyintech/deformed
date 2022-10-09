@@ -116,6 +116,10 @@ const Create = () => {
                     title: "",
                     required: true,
                     referenceId: `question-${numQuestions}`,
+                    properties: {
+                      allowOtherChoice: false,
+                      choices: [],
+                    },
                   });
                 }}
               >

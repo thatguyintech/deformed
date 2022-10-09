@@ -1,117 +1,39 @@
+import { getFormAnswers, getFormsCreatedByAddress } from "@/api/forms";
 import Button from "@/components/Button/Button";
 import DropdownMenu from "@/components/DropdownMenu/DropdownMenu";
+import { useWeb3Auth } from "@/hooks/useWeb3Auth";
 import { useEffect, useMemo, useRef, useState } from "react";
 import RequestCard from "./RequestCard";
 
-const Responses = ({ tokens }: any) => {
+const Responses = () => {
   const [selectedForm, setSelectedForm] = useState<number | undefined>();
+  const [createdForms, setCreatedForms] = useState<any[]>([]);
+  const [responses, setResponses] = useState<any[]>([]);
+
+  const { web3authProvider, address } = useWeb3Auth();
 
   useEffect(() => {
     const fetch = async () => {
-      if (tokens?.length) {
-        selectForm(0);
+      if (web3authProvider && address) {
+        const formsResponse = await getFormsCreatedByAddress(address);
+        setCreatedForms(formsResponse.data);
+        selectForm(formsResponse.data[0].formId);
       }
     };
     fetch();
-  }, [tokens]);
+  }, [address, web3authProvider]);
 
-  const responses = [
-    {
-      answer: {
-        formId: 1,
-        formAnswers: [
-          {
-            value: "sefafeafw",
-            referenceId: "question-0",
-          },
-        ],
-      },
-      address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      ownedCredentials: [
-        {
-          contractAddress: "0xb876baf8f69cd35fb96a17a599b070fbdd18a6a1",
-          tokenId: "796",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchAnswers = async () => {};
+    fetchAnswers();
+  }, [selectedForm]);
 
-  const forms = [
-    {
-      form: {
-        fields: [
-          {
-            type: "shortText",
-            title: "waawef",
-            required: true,
-            referenceId: "question-0",
-          },
-        ],
-      },
-      accessControlTokens: [
-        {
-          contractAddress: "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
-          tokenId: 1,
-        },
-      ],
-      credentials: [
-        {
-          contractAddress: "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
-          tokenId: 1,
-        },
-      ],
-    },
-    {
-      form: {
-        fields: [
-          {
-            type: "shortText",
-            title: "waawef",
-            required: true,
-            referenceId: "question-0",
-          },
-        ],
-      },
-      accessControlTokens: [
-        {
-          contractAddress: "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
-          tokenId: 1,
-        },
-      ],
-      credentials: [
-        {
-          contractAddress: "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
-          tokenId: 1,
-        },
-      ],
-    },
-  ];
-
-  const selectForm = async (tokenId: number) => {
-    setSelectedForm(tokenId);
-    // const response = await getRequestsForToken({
-    //   tokenId,
-    //   statusType: "pending",
-    // });
-    // const templateResponse = await getRequestTemplates({ tokenId });
-    // setTemplate(templateResponse?.data[0]);
-    // setChecklist(
-    //   response?.data?.map((request: any) => {
-    //     return {
-    //       ...request,
-    //       templateAnswers: request?.templateAnswers?.map((answer: any) => {
-    //         const questionForAnswer = templateResponse?.data[0]?.fields?.find(
-    //           (field: any) => field.referenceId === answer.referenceId
-    //         )?.title;
-    //         return {
-    //           ...answer,
-    //           question: questionForAnswer,
-    //         };
-    //       }),
-    //       checked: false,
-    //     };
-    //   })
-    // );
+  const selectForm = async (formId: number) => {
+    setSelectedForm(formId);
+    if (formId) {
+      const answersResponse = await getFormAnswers(selectedForm as number);
+      setResponses(answersResponse.data);
+    }
   };
 
   const requestCards = useMemo(() => {
@@ -129,7 +51,7 @@ const Responses = ({ tokens }: any) => {
       <h1 className="text-center text-xl font-semibold">Responses</h1>
       <div className="flex items-center mb-6 mt-8 justify-end ">
         <DropdownMenu
-          items={forms?.map((form: any, index: number) => {
+          items={createdForms?.map((form: any, index: number) => {
             return {
               id: index,
               label: `Form ${index}`,

@@ -1,3 +1,5 @@
+import { cx } from "@/utils/utils";
+
 interface Props {
   label?: string;
   isRequired?: boolean;
@@ -6,8 +8,8 @@ interface Props {
 
 const FormLabel = ({ className, label, isRequired }: Props) => {
   return label ? (
-    <p className={className}>
-      {label} {isRequired && "*"}
+    <p className={cx(className, "font-semibold")}>
+      {label} <span className="text-red-400">{isRequired && "*"}</span>
     </p>
   ) : (
     <></>

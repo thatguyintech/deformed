@@ -11,6 +11,7 @@ const Question = ({ name, index }: any) => {
     formState: { errors },
     setFocus,
     watch,
+    setValue,
   } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -29,6 +30,7 @@ const Question = ({ name, index }: any) => {
       iconUrl: "",
       onClick: () => {
         setSelectedType("shortText");
+        setValue(`fields.${index}.type`, "shortText");
         setFocus(`fields.${index}.title`);
         remove();
       },
@@ -39,6 +41,7 @@ const Question = ({ name, index }: any) => {
       iconUrl: "",
       onClick: () => {
         setSelectedType("longText");
+        setValue(`fields.${index}.type`, "longText");
         setFocus(`fields.${index}.title`);
         remove();
       },
@@ -50,6 +53,7 @@ const Question = ({ name, index }: any) => {
       onClick: () => {
         if (selectedType !== "multipleChoice") {
           setSelectedType("multipleChoice");
+          setValue(`fields.${index}.type`, "multipleChoice");
           append(`Option ${numOptions + 1}`, { shouldFocus: true });
           setFocus(`fields.${index}.title`);
         }
@@ -92,7 +96,6 @@ const Question = ({ name, index }: any) => {
       return (
         <div className="p-2 flex flex-col gap-y-2">
           {fields.map((field, fieldIndex) => {
-            console.log("field", field);
             return (
               <div key={`${field.id}`} className="flex items-center gap-x-2">
                 <div className="rounded-[50%] h-[18px] w-[18px] border border-gray-400"></div>

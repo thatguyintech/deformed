@@ -4,6 +4,15 @@ import { Main } from "@/templates/Main";
 import { useEffect, useState } from "react";
 import AnswerForm from "./AnswerForm";
 
+
+export type CredentialNFT = {
+  contractAddress: string;
+  tokenId: string;
+  imageUrl: string;
+  name: string;
+  description: string;
+}
+
 const Answer = ({ formId }: any) => {
   const [formFields, setFormFields] = useState<any[]>([]);
   const submitAnswer = async (rawFormAnswerDict: any) => {
@@ -54,6 +63,24 @@ const Answer = ({ formId }: any) => {
     obtainForm();
   }, [formId]);
 
+
+  const TMP_LIST_OF_CREDENTIALS: CredentialNFT[] = [
+    {
+      contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1",
+      tokenId: "797",
+      imageUrl: "https://s3.amazonaws.com/sandbox.images.mintkudos.xyz/token/797.jpeg",
+      name: "Proof of Trek: Monserrate",
+      description: "We certify that you sprinted up Monserrate in under 30 minutes. You are a beast!",
+    },
+    {
+      contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1",
+      tokenId: "796",
+      imageUrl: "https://s3.amazonaws.com/sandbox.images.mintkudos.xyz/token/796.png",
+      name: "ETH Bogota Attendance!",
+      description: "You participated in the ETH Bogota Hackathon! Nice job!",
+    }
+  ];
+
   return (
     <>
       <Main>
@@ -63,6 +90,7 @@ const Answer = ({ formId }: any) => {
           <AnswerForm
             className="w-full mb-5"
             fields={formFields}
+            credentials={TMP_LIST_OF_CREDENTIALS}
             onSubmit={submitAnswer}
           />
         </Card>

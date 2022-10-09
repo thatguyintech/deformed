@@ -24,10 +24,7 @@ export class InvalidFormFieldParameterValue extends ClientError {
 }
 
 export class MissingFormFieldProperties extends ClientError {
-  constructor(
-    formFieldType: FormFieldType,
-    requiredProperties: string[],
-  ) {
+  constructor(formFieldType: FormFieldType, requiredProperties: string[]) {
     super(
       `Missing properties for form field type "${formFieldType}", required properties: ${requiredProperties}.`,
     );

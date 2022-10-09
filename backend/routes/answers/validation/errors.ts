@@ -1,16 +1,16 @@
 import { ClientError, InternalServerError } from "../../../lib/error";
 
 export class InvalidForm extends ClientError {
-  constructor(formId?: string) {
-    super(`Form with ID ${formId} is invalid or not found.`);
+  constructor(formHash?: string) {
+    super(`Form with hash ${formHash} is invalid or not found.`);
     this.name = "InvalidForm";
   }
 }
 
 export class InvalidFormFieldReferenceId extends ClientError {
-  constructor(formFieldReferenceId: string, formId: string) {
+  constructor(formFieldReferenceId: string, formHash: string) {
     super(
-      `"${formFieldReferenceId}" is not a valid referenceId for form ID ${formId}`,
+      `"${formFieldReferenceId}" is not a valid referenceId for form hash ${formHash}`,
     );
     this.name = "InvalidFormFieldReferenceId";
   }
@@ -26,9 +26,9 @@ export class InvalidAnswerFieldValue extends ClientError {
 }
 
 export class MisconfiguredForm extends InternalServerError {
-  constructor(formId: string, fieldName: string) {
+  constructor(formHash: string, fieldName: string) {
     super(
-      `Form ${formId} field "${fieldName}" has missing required properties.`,
+      `Form ${formHash} field "${fieldName}" has missing required properties.`,
     );
     this.name = "MisconfiguredForm";
   }

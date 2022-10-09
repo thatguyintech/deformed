@@ -2,13 +2,10 @@ import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
 
 import { Env } from "./lib/env";
-import {
-  ClientError,
-  InternalServerError,
-} from "./lib/error";
+import { ClientError, InternalServerError } from "./lib/error";
 import { expressLogger, apiLogger } from "./lib/logger";
-import { formsRouter } from "./routes/forms";
 import { answersRouter } from "./routes/answers";
+import { formsRouter } from "./routes/forms";
 
 const app: Application = express();
 const port = 8080;
@@ -16,16 +13,14 @@ const port = 8080;
 // Body parsing Middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(
-  cors({}),
-);
+app.use(cors({}));
 
 // Setup logger
 app.use(expressLogger);
 
 // Routers
-app.use("/forms", formsRouter)
-app.use("/answers", answersRouter)
+app.use("/forms", formsRouter);
+app.use("/answers", answersRouter);
 
 // One-off: health endpoint
 app.get("/healthz", async (req: Request, res: Response): Promise<Response> => {

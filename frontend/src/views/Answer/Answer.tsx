@@ -3,9 +3,17 @@ import Card from "@/components/Card/Card";
 import { Main } from "@/templates/Main";
 import { useEffect, useState } from "react";
 import AnswerForm from "./AnswerForm";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import { checkOwner } from "../../api/nfts";
+interface Token {
+  contractAddress: string;
+  tokenId: string;
+}
 
 const Answer = ({ formId }: any) => {
+  const { address } = useWeb3Auth();
   const [formFields, setFormFields] = useState<any[]>([]);
+  const [hasAccess, setHasAccess] = useState<boolean>(false);
   const submitAnswer = async (rawFormAnswerDict: any) => {
     /**
      * The form answers will come in the following format:
@@ -42,13 +50,36 @@ const Answer = ({ formId }: any) => {
     }
   };
 
+  // returns true if the loggedInAddress owns *all* of the requiredTokens
+  const checkAccessTokens = async (requiredTokens: Array<Token>, loggedInAddress: string) => {
+    console.log("loggedInAddress: ", loggedInAddress);
+    console.log("checking access tokens");
+    for (const token of requiredTokens) {
+      const contractAddress = token.contractAddress;
+      const tokenId = token.tokenId;
+      // fetch owners of each token
+      const owners = await checkOwner(contractAddress, tokenId);
+      console.log("owners: ", owners);
+      // check if logged in user owns the token, short-circuit if they don't own one
+      if (!owners.includes(loggedInAddress.toLowerCase())) {
+        console.log("token not owned");
+        return false;
+      }
+    }
+    console.log("all tokens owned");
+    // return true if all tokens are owned by logged in user
+    return true;
+  }
+
 
   // obtain the form config from the backend API to populate the form itself
   useEffect(() => {
     const obtainForm = async () => {
       if (formId) {
         const form = await getForm(formId);
+        console.log(form);
         setFormFields(form.fields);
+        setHasAccess(await checkAccessTokens(form.accessControlTokens, address));
       }
     };
     obtainForm();
@@ -57,15 +88,19 @@ const Answer = ({ formId }: any) => {
   return (
     <>
       <Main>
-        <Card className="rounded py-10 px-12 bg-white flex-col shadow-md">
-          {/* <h2 className="text-center">Answer Form</h2> */}
-
-          <AnswerForm
-            className="w-full mb-5"
-            fields={formFields}
-            onSubmit={submitAnswer}
-          />
-        </Card>
+        {!hasAccess ? (
+          <Card className="rounded py-10 px-12 bg-white flex-col shadow-md">
+            <div>You do not have access to all of the required tokens!</div>
+          </Card>
+        ): (
+          <Card className="rounded py-10 px-12 bg-white flex-col shadow-md">
+            <AnswerForm
+              className="w-full mb-5"
+              fields={formFields}
+              onSubmit={submitAnswer}
+            />
+          </Card>
+        )}
       </Main>
     </>
   );

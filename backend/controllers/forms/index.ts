@@ -61,7 +61,7 @@ export const getForms = asyncWrapper(
     }
     const formIds = await deformed.getCreatedForms(createdByAddress);
     const data = [];
-    for (const formId in formIds) {
+    for (const formId of formIds) {
       const hash = (await deformed.forms(formId)).configIPFSHash;
       const [cid, fileName] = hash.split("/");
       const form = JSON.parse(await retrieve(cid, fileName)) as Form;

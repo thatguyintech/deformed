@@ -8,6 +8,8 @@ import RequestCard from "./RequestCard";
 
 const Responses = () => {
   const [selectedForm, setSelectedForm] = useState<number | undefined>();
+  const [selectedFields, setSelectedFields] = useState<number | undefined>();
+
   const [createdForms, setCreatedForms] = useState<any[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,20 +22,17 @@ const Responses = () => {
         setLoading(true);
         const formsResponse = await getFormsCreatedByAddress(address);
         setCreatedForms(formsResponse.data);
-        selectForm(formsResponse.data[0].formId);
+        selectForm(formsResponse.data[0]);
         setLoading(false);
       }
     };
     fetch();
-  }, [address, web3authProvider]);
+  }, [web3authProvider]);
 
-  useEffect(() => {
-    const fetchAnswers = async () => {};
-    fetchAnswers();
-  }, [selectedForm]);
-
-  const selectForm = async (formId: number) => {
+  const selectForm = async (formData: any) => {
+    const formId = formData?.formId;
     setSelectedForm(formId);
+    setSelectedFields(formData?.form?.fields);
     if (formId) {
       const answersResponse = await getFormAnswers(selectedForm as number);
       setResponses(answersResponse.data);
@@ -44,7 +43,11 @@ const Responses = () => {
     return responses?.map((response: any, index: number) => {
       return (
         <div className="flex items-center" key={"response" + index}>
-          <RequestCard answers={response.answers} address={response.address} />
+          <RequestCard
+            answers={response.answers}
+            address={response.address}
+            fields={selectedFields}
+          />
         </div>
       );
     });
@@ -65,7 +68,7 @@ const Responses = () => {
                   label: `Form ${form.formId}`,
                   iconUrl: "",
                   onClick: async () => {
-                    await selectForm(form.formId);
+                    await selectForm(form);
                   },
                 };
               })}

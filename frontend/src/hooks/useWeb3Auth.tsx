@@ -37,8 +37,8 @@ export const Web3AuthProvider = ({children}: any) => {
         clientId: WEB3_AUTH_CLIENT_ID,
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.EIP155,
-          chainId: "0x1", // TODO: support dynamic chain ID
-          rpcTarget: "https://eth-mainnet.g.alchemy.com/v2/EGanVQmmBmhP5M7_tGsPEyI6YDQfngjZ", // TODO: support dynamic rpc url
+          chainId: "0x13881", // TODO: support dynamic chain ID
+          rpcTarget: "https://polygon-mumbai.g.alchemy.com/v2/EGanVQmmBmhP5M7_tGsPEyI6YDQfngjZ", // TODO: support dynamic rpc url
         },
       });
 

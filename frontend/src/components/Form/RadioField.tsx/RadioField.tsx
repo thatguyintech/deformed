@@ -36,8 +36,6 @@ const RadioField = ({
     };
   }, [name, unregister]);
 
-  const border = borderStyle(!!errors[name]);
-
   return (
     <>
       <div>

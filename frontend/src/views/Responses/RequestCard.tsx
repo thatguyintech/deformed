@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 interface RequestCardProps {
-  answer: any;
+  answers: any;
   address: string;
 }
 
-const RequestCard = ({ answer, address }: RequestCardProps) => {
+const RequestCard = ({ answers, address }: RequestCardProps) => {
   return (
     <>
       <div className="bg-white shadow-md w-full rounded-lg px-6 py-4 border-solid border-[1px] border-gray">
@@ -15,7 +15,7 @@ const RequestCard = ({ answer, address }: RequestCardProps) => {
           </p>
         </div>
 
-        {answer?.formAnswers?.map((formAnswer: any, index: number) => {
+        {answers?.formAnswers?.map((formAnswer: any, index: number) => {
           return (
             <div className="mb-2" key={formAnswer.referenceId}>
               <QuestionAnswer

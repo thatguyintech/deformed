@@ -27,6 +27,7 @@ const Answer = ({ formId }: any) => {
   const [formFields, setFormFields] = useState<any[]>([]);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [ownedCredentials, setOwnedCredentials] = useState<CredentialNFT[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const { web3authProvider } = useWeb3Auth();
 
@@ -94,10 +95,10 @@ const Answer = ({ formId }: any) => {
     return true;
   };
 
-  const obtainOwnedCredentials = async(
+  const obtainOwnedCredentials = async (
     adminSetCredentials: Array<Token>,
-    loggedInAddress: string,
-  ): Promise<CredentialNFT[]>=> {
+    loggedInAddress: string
+  ): Promise<CredentialNFT[]> => {
     const ownedTokens = [];
 
     console.log(adminSetCredentials);
@@ -108,17 +109,22 @@ const Answer = ({ formId }: any) => {
       const tokenId = token.tokenId;
       const owners = await checkOwner(contractAddress, tokenId);
       if (owners.includes(loggedInAddress.toLowerCase())) {
-        ownedTokens.push({contractAddress: contractAddress, tokenId: tokenId});
+        ownedTokens.push({
+          contractAddress: contractAddress,
+          tokenId: tokenId,
+        });
       }
     }
 
     // then obtain NFT metadata for any owned credentials
     const embellishedOwnedTokens: CredentialNFT[] = [];
     for (const token of ownedTokens) {
-      embellishedOwnedTokens.push(await fetchNFTMetadata(token.contractAddress, token.tokenId));
+      embellishedOwnedTokens.push(
+        await fetchNFTMetadata(token.contractAddress, token.tokenId)
+      );
     }
     return embellishedOwnedTokens;
-  }
+  };
 
   // obtain the form config from the backend API to populate the form itself
   useEffect(() => {
@@ -135,8 +141,12 @@ const Answer = ({ formId }: any) => {
     const checkAccess = async () => {
       if (address) {
         const form = await getForm(formId);
-        setHasAccess(await checkAccessTokens(form.accessControlTokens, address));
-        setOwnedCredentials(await obtainOwnedCredentials(form.credentials, address));
+        setHasAccess(
+          await checkAccessTokens(form.accessControlTokens, address)
+        );
+        setOwnedCredentials(
+          await obtainOwnedCredentials(form.credentials, address)
+        );
       }
     };
     checkAccess();

@@ -29,6 +29,8 @@ const config: HardhatUserConfig = {
 const {
   MUMBAI_NETWORK_RPC_URL,
   MUMBAI_PRIVATE_KEY,
+  OPT_GOERLI_NETWORK_RPC_URL,
+  OPT_GOERLI_PRIVATE_KEY,
 } = process.env;
 
 if (MUMBAI_NETWORK_RPC_URL && MUMBAI_PRIVATE_KEY) {
@@ -36,6 +38,14 @@ if (MUMBAI_NETWORK_RPC_URL && MUMBAI_PRIVATE_KEY) {
     chainId: 80001,
     url: MUMBAI_NETWORK_RPC_URL,
     accounts: [MUMBAI_PRIVATE_KEY],
+  };
+}
+
+if (OPT_GOERLI_NETWORK_RPC_URL && OPT_GOERLI_PRIVATE_KEY) {
+  (config.networks as NetworksUserConfig).optgoerli = {
+    chainId: 420,
+    url: OPT_GOERLI_NETWORK_RPC_URL,
+    accounts: [OPT_GOERLI_PRIVATE_KEY],
   };
 }
 

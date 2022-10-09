@@ -11,7 +11,7 @@ interface Web3AuthContext {
   web3authProvider: SafeEventEmitterProvider | null;
   login: any;
   logout: any;
-  getAccounts: any;
+  address: string;
 }
 
 const Context = createContext<Web3AuthContext>({
@@ -19,12 +19,13 @@ const Context = createContext<Web3AuthContext>({
   web3authProvider: null,
   login: null,
   logout: null,
-  getAccounts: null,
+  address: "",
 });
 
 export const Web3AuthProvider = ({children}: any) => {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [web3authProvider, setWeb3authProvider] = useState<SafeEventEmitterProvider | null>(null);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (!!web3auth && !!web3authProvider) {
@@ -44,9 +45,12 @@ export const Web3AuthProvider = ({children}: any) => {
       await w.initModal();
 
       setWeb3auth(w);
-
+      
       if (w.provider) {
         setWeb3authProvider(w.provider);
+        const rpc = new RPC(w.provider);
+        const addr = await rpc.getAccounts();
+        setAddress(addr);
       }
     };
 
@@ -60,6 +64,9 @@ export const Web3AuthProvider = ({children}: any) => {
     }
     const web3authProvider = await web3auth.connect();
     setWeb3authProvider(web3authProvider);
+    const rpc = new RPC(web3authProvider!);
+    const addr = await rpc.getAccounts();
+    setAddress(addr);
   };
 
   const getUserInfo = async () => {
@@ -132,7 +139,7 @@ export const Web3AuthProvider = ({children}: any) => {
   };
 
   return (
-    <Context.Provider value={{ web3auth, web3authProvider, login, logout, getAccounts}}>
+    <Context.Provider value={{ web3auth, web3authProvider, login, logout, address}}>
       {children}
     </Context.Provider>
   ) 

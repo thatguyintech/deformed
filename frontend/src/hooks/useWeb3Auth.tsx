@@ -12,6 +12,7 @@ interface Web3AuthContext {
   login: any;
   logout: any;
   getAccounts: any;
+  sendTransaction: any;
 }
 
 const Context = createContext<Web3AuthContext>({
@@ -20,6 +21,7 @@ const Context = createContext<Web3AuthContext>({
   login: null,
   logout: null,
   getAccounts: null,
+  sendTransaction: null,
 });
 
 export const Web3AuthProvider = ({children}: any) => {
@@ -142,7 +144,7 @@ export const Web3AuthProvider = ({children}: any) => {
   };
 
   return (
-    <Context.Provider value={{ web3auth, web3authProvider, login, logout, getAccounts}}>
+    <Context.Provider value={{ web3auth, web3authProvider, login, logout, getAccounts, sendTransaction}}>
       {children}
     </Context.Provider>
   ) 
@@ -150,6 +152,5 @@ export const Web3AuthProvider = ({children}: any) => {
 
 /**
  * Consumer for Web3Auth object. Must be used within context of Web3AuthProvider.
- * @returns { web3auth, web3authProvider }
  */
  export const useWeb3Auth = () => useContext(Context);

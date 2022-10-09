@@ -3,7 +3,7 @@ import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { useRouter } from "next/router";
 
 const Header = () => {
-  const { web3authProvider, login, logout } = useWeb3Auth();
+  const { web3authProvider, login, logout, address } = useWeb3Auth();
   const router = useRouter();
 
   return (
@@ -17,6 +17,7 @@ const Header = () => {
         >
           <h1 className="text-3xl font-bold">Deformed</h1>
         </Button>
+        { web3authProvider ? (<div>{"Logged in as: "+address}</div>) : "Please log in!"}
         <Button onClick={web3authProvider ? logout : login} theme="black">
           {web3authProvider ? "Log Out" : "Log In"}
         </Button>

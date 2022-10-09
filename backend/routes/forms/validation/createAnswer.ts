@@ -23,7 +23,10 @@ const AnswerValidations = {
 };
 
 const formAnswersValidator: CustomValidator = async (value, { req }) => {
-  const formId = req.body.formId as string;
+  if (!req.params || !req.params.formId) {
+    throw new InvalidForm(req.params?.formId);
+  }
+  const formId = req.params.formId as string;
 
   const hash = (await deformed.forms(formId)).configIPFSHash;
 
@@ -113,11 +116,6 @@ const formAnswersValidator: CustomValidator = async (value, { req }) => {
 };
 
 export const createAnswerValidator = checkSchema({
-  formId: {
-    isInt: {
-      options: { min: 0 },
-    },
-  },
   formAnswers: {
     isArray: true,
     custom: {

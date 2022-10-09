@@ -4,7 +4,6 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import { Env } from "./lib/env";
 import { ClientError, InternalServerError } from "./lib/error";
 import { expressLogger, apiLogger } from "./lib/logger";
-import { answersRouter } from "./routes/answers";
 import { formsRouter } from "./routes/forms";
 
 const app: Application = express();
@@ -20,7 +19,6 @@ app.use(expressLogger);
 
 // Routers
 app.use("/forms", formsRouter);
-app.use("/answers", answersRouter);
 
 // One-off: health endpoint
 app.get("/healthz", async (req: Request, res: Response): Promise<Response> => {

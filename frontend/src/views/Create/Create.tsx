@@ -1,14 +1,22 @@
 import { createForm } from "@/api/forms";
 import Button from "@/components/Button/Button";
 import Form from "@/components/Form/Form";
-import TextField from "@/components/Form/TextField/TextField";
 import { useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import Question from "./Question";
 
 const Create = () => {
   const methods = useForm({
-    defaultValues: { fields: [] },
+    defaultValues: {
+      fields: [
+        {
+          type: "shortText",
+          title: "",
+          required: true,
+          referenceId: `question-0`,
+        },
+      ],
+    },
     mode: "all",
   });
 
@@ -24,7 +32,6 @@ const Create = () => {
   }, [watch()]);
 
   const onFormSubmit = handleSubmit(async (value) => {
-    console.log(value);
     await createForm(value);
   });
 
@@ -37,8 +44,8 @@ const Create = () => {
             <div className="mb-3">
               <Question
                 key={field.id} // important to include key with field's id
-                name={`fields.${index}`}
-                id={index}
+                name={`question-${index}`}
+                index={index}
               />
             </div>
           );
@@ -71,12 +78,14 @@ const Create = () => {
           </div>
         </div>
 
-        <Button className="mt-8" type="submit">
-          Create
-        </Button>
+        <div className="flex justify-end">
+          <Button className="mt-8" type="submit">
+            Create
+          </Button>
+        </div>
       </Form>
 
-      {JSON.stringify(watch())}
+      {/* {JSON.stringify(watch())} */}
     </>
   );
 };

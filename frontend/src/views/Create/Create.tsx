@@ -25,6 +25,8 @@ const Create = () => {
           referenceId: `question-0`,
         },
       ],
+      accessControlTokens: "",
+      credentials: ""
     },
     mode: "all",
   });
@@ -42,16 +44,37 @@ const Create = () => {
     return watch().fields.length;
   }, [watch()]);
 
-  const onFormSubmit = handleSubmit(async (value) => {
-    console.log(value);
-    const formHash = await createForm(value);
+  const onFormSubmit = handleSubmit(async (formValues) => {
+    const formHash = await createForm({fields: formValues.fields});
     const provider = new ethers.providers.Web3Provider(web3authProvider);
     const deformed = Deformed__factory.connect("0xfFAfd3b46D3034bB3f12868c92DCA375E7263C38", provider.getSigner());
     await deformed.createForm(formHash.hash,
-        // TODO: add your token arrays
-        // Looks like [{contractAddress: deformed.address, tokenId: 3}, ...]
-        [], []);
+        convertTokenArrayStringIntoArray(
+          formValues.accessControlTokens
+        ),
+        convertTokenArrayStringIntoArray(
+          formValues.credentials
+        ));
   });
+
+  const convertTokenArrayStringIntoArray = (tokenArrayString: string) => {
+    // example:
+    // input: (0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 12), (0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 16)
+    // output: [{contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1", tokenId: 12}, {contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1", tokenId: 16}]
+    const res = []
+    const tokens = tokenArrayString.replace(/\s/g, "").split(",");
+    for (let i = 0; i < tokens.length; i += 2) {
+      const contractAddress = tokens[i];
+      const tokenId = tokens[i+1];
+      if (contractAddress && tokenId) {
+        res.push({
+          contractAddress: contractAddress.replace(/\(/g, ""),
+          tokenId: tokenId.replace(/\)/g, ""),
+        })
+      }
+    }
+    return res;
+  }
 
   const [accessControlChecked, setAccessControlChecked] = useState(false);
   const [credentialsChecked, setCredentialsChecked] = useState(false);
@@ -104,12 +127,6 @@ const Create = () => {
                   </Button>
                 </div>
               </div>
-
-              <div className="flex justify-end">
-                <Button className="mt-8" type="submit">
-                  Create
-                </Button>
-              </div>
             </Tab.Panel>
             <Tab.Panel>
               <Card className="px-9 py-6">
@@ -134,12 +151,12 @@ const Create = () => {
                   {accessControlChecked && (
                     <>
                       <p className="text-sm text-gray-400 mt-2 mb-2">
-                        Format: (contract address, token_id, token_id,...),
-                        (contract address, token_id, token_id,...)
+                        Format: (contract address, token_id),
+                        (contract address, token_id)
                       </p>
                       <TextAreaField
                         name={`accessControlTokens`}
-                        placeholder="(0x138910238090192830, 12, 14, 15), (0x923042839429304, 16, 17, 18)"
+                        placeholder="(0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 12), (0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 16)"
                       />
                     </>
                   )}
@@ -163,18 +180,23 @@ const Create = () => {
                   {credentialsChecked && (
                     <>
                       <p className="text-sm text-gray-400 mt-2 mb-2">
-                        Format: (contract address, token_id, token_id,...),
-                        (contract address, token_id, token_id,...)
+                      Format: (contract address, token_id),
+                        (contract address, token_id)
                       </p>
                       <TextAreaField
                         name="credentials"
-                        placeholder="(0x138910238090192830, 12, 14, 15), (0x923042839429304, 16, 17, 18)"
+                        placeholder="(0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 12), (0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1, 16)"
                       />
                     </>
                   )}
                 </div>
               </Card>
             </Tab.Panel>
+            <div className="flex justify-end">
+                <Button className="mt-8" type="submit">
+                  Create
+                </Button>
+              </div>
           </Form>
         </Tab.Panels>
       </Tab.Group>

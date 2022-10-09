@@ -93,15 +93,15 @@ function convertTokenPointer(tokenPointer: Deformed.TokenPointerStructOutput) {
  */
 export const getFormAnswers = asyncWrapper(
   async (req: Request, res: Response): Promise<Response> => {
-    const formId = convertToInteger(req.query.formId);
+    const formId = convertToInteger(req.params.formId);
 
     const data = [];
     const responses = await deformed.getResponses(formId);
     for (const response of responses) {
       const hash = response.responseIPFSHash;
       const [cid, fileName] = hash.split("/");
-      const answer = JSON.parse(await retrieve(cid, fileName));
-      data.push({ answer: answer, address: response.respondingAddress });
+      const answers = JSON.parse(await retrieve(cid, fileName));
+      data.push({ answers: answers, address: response.respondingAddress });
     }
     return res.status(200).send({ data: data });
   },

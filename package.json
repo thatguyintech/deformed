@@ -1,4 +1,5 @@
 {
+  "name": "@deformed/contracts",
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.1.1",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
@@ -13,6 +14,8 @@
   "devDependencies": {
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.3",
+    "@types/mocha": "^8.2.0",
+    "ethereum-waffle": "^3.0.0",
     "typechain": "^8.1.0"
   }
 }

@@ -3,6 +3,7 @@ import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import { NetworksUserConfig } from "hardhat/types";
+import { HardhatUserConfig } from "hardhat/config";
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ const config: HardhatUserConfig = {
       chainId: 1337
     },
   },
-  etherscan: {},
+  // etherscan: {},
 };
 
 const {

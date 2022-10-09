@@ -86,31 +86,13 @@ const Answer = ({ formId }: any) => {
     const obtainForm = async () => {
       if (formId) {
         const form = await getForm(formId);
-        console.log(form);
-        setFormFields(form.fields);
+        setFormFields(form.form.fields);
         setHasAccess(await checkAccessTokens(form.accessControlTokens, address));
       }
     };
     obtainForm();
   }, [formId]);
 
-
-  const TMP_LIST_OF_CREDENTIALS: CredentialNFT[] = [
-    {
-      contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1",
-      tokenId: "797",
-      imageUrl: "https://s3.amazonaws.com/sandbox.images.mintkudos.xyz/token/797.jpeg",
-      name: "Proof of Trek: Monserrate",
-      description: "We certify that you sprinted up Monserrate in under 30 minutes. You are a beast!",
-    },
-    {
-      contractAddress: "0xB876baF8F69cD35fb96A17a599b070FBdD18A6a1",
-      tokenId: "796",
-      imageUrl: "https://s3.amazonaws.com/sandbox.images.mintkudos.xyz/token/796.png",
-      name: "ETH Bogota Attendance!",
-      description: "You participated in the ETH Bogota Hackathon! Nice job!",
-    }
-  ];
 
   return (
     <>

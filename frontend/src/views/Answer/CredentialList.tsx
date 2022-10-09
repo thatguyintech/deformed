@@ -15,7 +15,7 @@ const CredentialList = ({className, credentials}: CredentialListProps) => {
   return (
     <>
       <ImageList className={className}>
-      {credentials.map((item) => (
+      {credentials && credentials.map((item) => (
         <ImageListItem key={item.imageUrl}>
           <img
             src={`${item.imageUrl}?w=248&fit=crop&auto=format`}

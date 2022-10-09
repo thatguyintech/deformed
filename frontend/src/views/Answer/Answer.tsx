@@ -7,6 +7,7 @@ import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { checkOwner, fetchNFTMetadata } from "../../api/nfts";
 import { ethers } from "ethers";
 import { Deformed__factory } from "@deformed/contracts";
+import { PageLoader } from "@/components/PageLoader/PageLoader";
 
 interface Token {
   contractAddress: string;
@@ -27,7 +28,8 @@ const Answer = ({ formId }: any) => {
   const [formFields, setFormFields] = useState<any[]>([]);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
   const [ownedCredentials, setOwnedCredentials] = useState<CredentialNFT[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [txHash, setTxHash] = useState<string>("");
 
   const { web3authProvider } = useWeb3Auth();
 
@@ -65,9 +67,13 @@ const Answer = ({ formId }: any) => {
         "0xfFAfd3b46D3034bB3f12868c92DCA375E7263C38",
         provider.getSigner()
       );
-      await deformed.submitFormResponse(formId, response.hash);
+      setLoading(true);
+      const tx = await deformed.submitFormResponse(formId, response.hash);
+      setTxHash(tx.hash);
+      setLoading(false);
     } catch (error: any) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -156,9 +162,7 @@ const Answer = ({ formId }: any) => {
     <>
       <Main>
         {!hasAccess ? (
-          <Card className="rounded py-10 px-12 bg-white flex-col shadow-md">
-            <div>You do not have access to all of the required tokens!</div>
-          </Card>
+          <Card className="rounded py-10 px-12 bg-white flex-col shadow-md"></Card>
         ) : (
           <Card className="rounded py-10 px-12 bg-white flex-col shadow-md">
             <AnswerForm
@@ -167,6 +171,18 @@ const Answer = ({ formId }: any) => {
               credentials={ownedCredentials}
               onSubmit={submitAnswer}
             />
+            {loading && <PageLoader />}
+            {txHash && (
+              <div>
+                Successfully submitted!{" "}
+                <a
+                  href={`https://mumbai.polygonscan.com/tx/
+                ${txHash}`}
+                >
+                  <u>Link to transaction.</u>
+                </a>
+              </div>
+            )}
           </Card>
         )}
       </Main>
